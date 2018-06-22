@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+# This script serves as the Cython build step of the
+# [**Python Buildpack**](https://github.com/heroku/heroku-buildpack-python)
+# compiler.
+#
+# A [buildpack](https://devcenter.heroku.com/articles/buildpacks) is an
+# adapter between a Python application and Heroku's runtime.
+#
+# This script is invoked by [`bin/compile`](/).
+
+# Syntax sugar.
+# shellcheck source=bin/utils
+source "$BIN_DIR/utils"
+
+# Install Cython
+install_cython() {
+  echo "-----> Noticed $1. Bootstrapping Cython"
+  /app/.heroku/python/bin/pip install Cython | cleanup | indent
+}
+
+# If pylibmc exists within requirements, use vendored libmemcached.
+if (pip-grep -s requirements.txt Cython &> /dev/null) then
+  install_cython "Cython"
+elif (pip-grep -s requirements.txt jnius &> /dev/null) then
+  install_cython "jnius"
+fi
