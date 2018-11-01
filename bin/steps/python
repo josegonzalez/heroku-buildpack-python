@@ -105,7 +105,7 @@ if [ "$FRESH_PYTHON" ] || [[ ! $(pip --version) == *$PIP_UPDATE* ]]; then
   if [[ -n "$GET_PIP_PYPI_INDEX_URL" ]]; then
     rm $HOME/.config/pip/pip.conf
     echo "[index]" > $HOME/.config/pip/pip.conf
-    echo "index-url = $PYPI_MIRROR_URL" >> $HOME/.config/pip/pip.conf
+    echo "index-url = $GET_PIP_PYPI_INDEX_URL" >> $HOME/.config/pip/pip.conf
   fi
 
   /app/.heroku/python/bin/python "$ROOT_DIR/vendor/get-pip.py" pip=="$PIP_UPDATE" &> /dev/null
